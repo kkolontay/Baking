@@ -1,13 +1,13 @@
-package com.kkolontay.baking.ViewModel;
+package com.kkolontay.baking.viewmodel;
 
 import android.app.Application;
 import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
-import com.kkolontay.baking.MainActivity;
-import com.kkolontay.baking.Model.BakeModel;
-import com.kkolontay.baking.Services.JsonPlaceHolderApi;
+import com.kkolontay.baking.view.mainviewactive.MainActivity;
+import com.kkolontay.baking.model.BakeModel;
+import com.kkolontay.baking.services.JsonPlaceHolderApi;
 import java.util.ArrayList;
 import retrofit2.Call;
 import retrofit2.Callback;

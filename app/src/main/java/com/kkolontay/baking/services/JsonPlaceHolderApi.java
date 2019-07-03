@@ -1,6 +1,6 @@
-package com.kkolontay.baking.Services;
+package com.kkolontay.baking.services;
 
-import com.kkolontay.baking.Model.BakeModel;
+import com.kkolontay.baking.model.BakeModel;
 
 import java.util.ArrayList;
 

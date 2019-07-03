@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Baking</string>
     <string name="bargin_general_image">Bargin general image</string>
+    <string name="placeholder_for_baking">Placeholder for baking</string>
 </resources>

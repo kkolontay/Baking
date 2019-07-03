@@ -1,8 +1,9 @@
-package com.kkolontay.baking.Model;
+package com.kkolontay.baking.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class BakeModel {
+public class BakeModel implements Serializable {
     private int id;
     private String name;
     private ArrayList<Ingredient> ingredients;
