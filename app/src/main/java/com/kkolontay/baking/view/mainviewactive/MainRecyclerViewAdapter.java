@@ -63,6 +63,7 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
         return bakeModels.size();
     }
 
+
     public class MainViewHolder extends RecyclerView.ViewHolder {
         private ImageView imageView;
         private TextView textView;

@@ -12,7 +12,7 @@ import android.os.Bundle;
 import com.kkolontay.baking.R;
 import com.kkolontay.baking.extension.AlertMessageDialog;
 import com.kkolontay.baking.model.BakeModel;
-import com.kkolontay.baking.view.bakedetail.BakeDetailActivity;
+import com.kkolontay.baking.view.bakingdetail.BakeDetailActivity;
 import com.kkolontay.baking.viewmodel.MainViewModel;
 
 
@@ -68,6 +68,13 @@ public class MainActivity extends AppCompatActivity implements MainRecyclerViewA
                 return 2;
             }
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        recyclerViewAdapter = null;
+        gridLayoutManager = null;
     }
 
     @Override
