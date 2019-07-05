@@ -15,14 +15,17 @@ import androidx.fragment.app.Fragment;
 import com.kkolontay.baking.R;
 import com.kkolontay.baking.model.BakeModel;
 import com.kkolontay.baking.model.Step;
+import com.kkolontay.baking.view.BakeDetaiItemChoosenProtocol;
 import com.kkolontay.baking.view.bakingdetail.fragments.RecipeListAdapter;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 public class RecipeStepsFragment extends Fragment {
     private static final String TAG = RecipeStepsFragment.class.getSimpleName();
     private BakeModel model;
     private ArrayList<String> steps;
+    private WeakReference<BakeDetaiItemChoosenProtocol> delegate;
     public RecipeStepsFragment(BakeModel model) {
         this.model = model;
         initSteps();
@@ -39,6 +42,10 @@ public class RecipeStepsFragment extends Fragment {
         }
     }
 
+    public void setDelegate(BakeDetaiItemChoosenProtocol delegate) {
+            this.delegate = new WeakReference<BakeDetaiItemChoosenProtocol>(delegate);
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -49,6 +56,8 @@ public class RecipeStepsFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                delegate.get().bakeItemChoosen(i);
+
                 Log.v(TAG, new Integer(i).toString());
             }
         });
