@@ -26,10 +26,13 @@ public class RecipeStepsFragment extends Fragment {
     private BakeModel model;
     private ArrayList<String> steps;
     private WeakReference<BakeDetaiItemChoosenProtocol> delegate;
+
     public RecipeStepsFragment(BakeModel model) {
         this.model = model;
         initSteps();
     }
+
+    public RecipeStepsFragment(){}
 
     private void initSteps() {
         steps = new ArrayList<>();
