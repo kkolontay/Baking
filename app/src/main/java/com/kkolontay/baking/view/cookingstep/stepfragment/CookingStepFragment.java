@@ -17,8 +17,10 @@ import com.kkolontay.baking.model.Step;
 public class CookingStepFragment extends Fragment {
     private Step step;
     private TextView textView;
+    private static final String STEP = "stepsForSaving";
 
 
+    public CookingStepFragment(){}
     public CookingStepFragment(Step step) {
         super();
         this.step = step;
@@ -27,9 +29,18 @@ public class CookingStepFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            step = savedInstanceState.getParcelable(STEP);
+        }
         View rootView = inflater.inflate(R.layout.fragment_cooking_step_item, container, false);
         textView = rootView.findViewById(R.id.step_cooking_description_text_view);
         textView.setText(step.getDescription());
         return rootView;
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putParcelable(STEP, step);
+        super.onSaveInstanceState(outState);
     }
 }

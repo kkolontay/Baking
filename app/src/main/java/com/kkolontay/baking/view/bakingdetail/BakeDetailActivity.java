@@ -10,6 +10,7 @@ import com.kkolontay.baking.model.BakeModel;
 import com.kkolontay.baking.view.BakeDetaiItemChoosenProtocol;
 import com.kkolontay.baking.view.bakingdetail.fragments.recipefragment.RecipeStepsFragment;
 import com.kkolontay.baking.view.cookingstep.CookingStepActivity;
+import com.kkolontay.baking.view.cookingstep.stepfragment.CookingStepFragment;
 import com.kkolontay.baking.view.ingredientslist.IngredientsActivity;
 import com.kkolontay.baking.view.mainviewactive.MainActivity;
 
@@ -21,15 +22,26 @@ public class BakeDetailActivity extends AppCompatActivity implements BakeDetaiIt
     public static final String INGREDIENTS = "ingredientsItem";
     public static final String SELECTEDPOSITION = "selectedPosition";
     public static final String STEPS = "cookingSteps";
+    private boolean twoPanel;
+    private int selectedIndex;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bake_detail);
+
         if (savedInstanceState == null) {
+            selectedIndex = 0;
             model = getIntent().getParcelableExtra(MainActivity.MODEL);
         } else {
             model =  savedInstanceState.getParcelable(MODEL);
+            selectedIndex = savedInstanceState.getInt(SELECTEDPOSITION);
+        }
+        if(findViewById(R.id.cooking_step_frame) != null) {
+            twoPanel = true;
+            replaceFragment();
+        } else {
+            twoPanel = false;
         }
         setTitle(model.getName());
         Log.v(TAG, model.getImage());
@@ -46,7 +58,17 @@ public class BakeDetailActivity extends AppCompatActivity implements BakeDetaiIt
 
     public void onSaveInstanceState(@NonNull Bundle outState ) {
         outState.putParcelable(MODEL, model);
+        outState.putInt(SELECTEDPOSITION, selectedIndex);
         super.onSaveInstanceState(outState);
+    }
+
+    private void replaceFragment() {
+        CookingStepFragment fragment = new CookingStepFragment(model.getSteps().get(selectedIndex));
+        FragmentManager manager = getSupportFragmentManager();
+        manager.beginTransaction()
+                .replace(R.id.cooking_step_frame, fragment)
+                .commit();
+
     }
 
     @Override
@@ -57,11 +79,16 @@ public class BakeDetailActivity extends AppCompatActivity implements BakeDetaiIt
             startActivity(intent);
         } else {
             int stepPosition = position - 1;
-            if (stepPosition >= 0 && stepPosition < model.getSteps().size()) {
-                Intent intent = new Intent(this, CookingStepActivity.class);
-                intent.putExtra(SELECTEDPOSITION, stepPosition);
-                intent.putParcelableArrayListExtra(STEPS, model.getSteps());
-                startActivity(intent);
+            selectedIndex = stepPosition;
+            if (twoPanel == true) {
+                replaceFragment();
+            } else {
+                if (stepPosition >= 0 && stepPosition < model.getSteps().size()) {
+                    Intent intent = new Intent(this, CookingStepActivity.class);
+                    intent.putExtra(SELECTEDPOSITION, stepPosition);
+                    intent.putParcelableArrayListExtra(STEPS, model.getSteps());
+                    startActivity(intent);
+                }
             }
         }
     }

@@ -52,7 +52,7 @@ public class RecipeStepsFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.baking_staps_fragment, container, false);
+        View view = inflater.inflate(R.layout.baking_steps_fragment, container, false);
         ListView listView = view.findViewById(R.id.baking_staps_list_view);
         RecipeListAdapter adapter = new RecipeListAdapter(getContext(), steps);
         listView.setAdapter(adapter);

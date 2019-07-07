@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:baselineAligned="false"
+    android:orientation="horizontal"
+    tools:context=".view.bakingdetail.BakeDetailActivity">
+
+    <FrameLayout
+        android:id="@+id/steps_fragment_container"
+        android:layout_width="380dp"
+        android:layout_height="wrap_content"
+        android:name="com.kkolontay.baking.view.bakingdetail.fragments.recipefragment.RecipeStepsFragment"
+        android:scaleType="centerInside"/>
+
+    <View
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:background="@color/gray_black"
+        android:layout_marginStart="3dp"
+        android:layout_marginEnd="3dp"/>
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/cooking_step_frame">
+
+    </FrameLayout>
+
+
+</LinearLayout>

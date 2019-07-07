@@ -34,12 +34,16 @@ public class CookingStepActivity extends AppCompatActivity {
             selectedIndex = savedInstanceState.getInt(BakeDetailActivity.SELECTEDPOSITION);
         }
         configureButtons();
-        setTitle(stepsList.get(selectedIndex).getShortDescription());
+        replaceFragment();
+    }
+
+    private void replaceFragment() {
         CookingStepFragment fragment = new CookingStepFragment(stepsList.get(selectedIndex));
         FragmentManager manager = getSupportFragmentManager();
         manager.beginTransaction()
-                .add(R.id.cooking_step_frame, fragment)
+                .replace(R.id.cooking_step_frame, fragment)
                 .commit();
+        setTitle(stepsList.get(selectedIndex).getShortDescription());
     }
 
     private  void configureButtons() {
@@ -50,12 +54,14 @@ public class CookingStepActivity extends AppCompatActivity {
            if (selectedIndex < stepsList.size() - 1) {
                selectedIndex += 1;
                setButtonsVisible();
+               replaceFragment();
            }
         });
         previousStepButton.setOnClickListener(view -> {
             if (selectedIndex - 1 >= 0) {
                 selectedIndex -= 1;
                 setButtonsVisible();
+                replaceFragment();
             }
         });
     }
