@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements MainRecyclerViewA
         else {
             boolean isTablet = getResources().getBoolean(R.bool.isTablet);
             if (isTablet) {
-                return 4;
+                return 3;
             } else {
                 return 2;
             }

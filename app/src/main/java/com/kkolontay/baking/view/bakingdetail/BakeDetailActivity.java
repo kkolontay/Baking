@@ -63,7 +63,7 @@ public class BakeDetailActivity extends AppCompatActivity implements BakeDetaiIt
     }
 
     private void replaceFragment() {
-        CookingStepFragment fragment = new CookingStepFragment(model.getSteps().get(selectedIndex));
+        CookingStepFragment fragment = new CookingStepFragment( model.getSteps().get(selectedIndex));
         FragmentManager manager = getSupportFragmentManager();
         manager.beginTransaction()
                 .replace(R.id.cooking_step_frame, fragment)

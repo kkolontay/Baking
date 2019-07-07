@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:weightSum="2">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/step_cooking_description_text_view2"
+    <com.google.android.exoplayer2.ui.PlayerView
+        android:id="@+id/player_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:layout_weight="1"
-        android:textSize="18sp"
-        tools:text="Hello world" />
+        app:show_buffering="when_playing"
+        app:resize_mode="fixed_width"
+        app:default_artwork="@drawable/baking_placeholder"/>
+
     <TextView
         android:id="@+id/step_cooking_description_text_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:layout_weight="1"
         android:textSize="18sp"
         tools:text="Hello world" />
 
