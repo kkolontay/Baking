@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         app:show_buffering="when_playing"
         app:resize_mode="fixed_width"
-        app:default_artwork="@drawable/baking_placeholder"/>
+        android:focusable="true"/>
 
     <TextView
         android:id="@+id/step_cooking_description_text_view"

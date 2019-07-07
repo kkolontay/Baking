@@ -1,14 +1,11 @@
 package com.kkolontay.baking.view.cookingstep;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
-
+import android.content.res.Configuration;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.view.View;
 import android.widget.Button;
-
 import com.kkolontay.baking.R;
 import com.kkolontay.baking.model.Step;
 import com.kkolontay.baking.view.bakingdetail.BakeDetailActivity;
@@ -77,6 +74,41 @@ public class CookingStepActivity extends AppCompatActivity {
         } else {
             nextStepButton.setEnabled(true);
         }
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+
+            if (!getResources().getBoolean(R.bool.isTablet)) {
+                hideSystemUI();
+
+            }
+
+        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
+            if (!getResources().getBoolean(R.bool.isTablet)) {
+                showSystemUI();
+            }
+
+        }
+        super.onConfigurationChanged(newConfig);
+    }
+
+    private void hideSystemUI() {
+        View decorView = getWindow().getDecorView();
+        decorView.setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_IMMERSIVE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN);
+    }
+
+    private void showSystemUI() {
+        View decorView = getWindow().getDecorView();
+        decorView.setSystemUiVisibility(
+                         View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
     }
 
     @Override
