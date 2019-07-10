@@ -3,6 +3,7 @@ package com.kkolontay.baking.extension;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -24,7 +25,7 @@ public class DesiredRecipeIngredientsWidgetProvider extends AppWidgetProvider {
         Intent intent = new Intent(context, ListWidgetService.class);
         views.setRemoteAdapter(R.id.widget_list_view, intent);
         Intent appIntent = new Intent(context, MainActivity.class);
-        PendingIntent appPendingIntent = PendingIntent.getActivity(context, 0, appIntent, 0);
+        PendingIntent appPendingIntent = PendingIntent.getActivity(context, 0, appIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         views.setPendingIntentTemplate(R.id.widget_list_view, appPendingIntent);
         appWidgetManager.updateAppWidget(appWidgetId, views);
     }
@@ -34,8 +35,7 @@ public class DesiredRecipeIngredientsWidgetProvider extends AppWidgetProvider {
         for (int appWidgetId : appWidgetIds) {
             appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.widget_list_view);
         }
-
-        //appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_list_view);
+        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_list_view);
     }
 
     public static void updateIngredientWidgets(Context context, AppWidgetManager appWidgetManager,
