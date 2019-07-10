@@ -2,6 +2,7 @@ package com.kkolontay.baking.view.cookingstep.stepfragment;
 
 import android.content.Context;
 import android.content.res.Configuration;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -26,6 +27,8 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 import com.kkolontay.baking.R;
 import com.kkolontay.baking.model.Step;
+
+import java.net.InetAddress;
 
 
 public class CookingStepFragment extends Fragment {
@@ -76,11 +79,16 @@ public class CookingStepFragment extends Fragment {
         super.onSaveInstanceState(outState);
     }
 
+    private boolean isNetworkAvailable(Context context) {
+        ConnectivityManager connectivityManager = ((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE));
+        return connectivityManager.getActiveNetworkInfo() != null && connectivityManager.getActiveNetworkInfo().isConnected();
+    }
+
     private void initPlayer(String url) {
-        if (url == null) {
+
+        if (url == null || !isNetworkAvailable(context)) {
             mPlayerView.setVisibility(View.GONE);
             return;
-
         }
         Uri uri = Uri.parse(url);
         if (uri == null) {

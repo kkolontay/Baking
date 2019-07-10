@@ -5,24 +5,28 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
-
 import com.kkolontay.baking.R;
 import com.kkolontay.baking.extension.AlertMessageDialog;
+import com.kkolontay.baking.extension.ChoosenRecipeIngredientList;
+import com.kkolontay.baking.extension.DesiredRecipeIngredientsWidgetProvider;
 import com.kkolontay.baking.model.BakeModel;
 import com.kkolontay.baking.view.bakingdetail.BakeDetailActivity;
 import com.kkolontay.baking.viewmodel.MainViewModel;
 
 
 public class MainActivity extends AppCompatActivity implements MainRecyclerViewAdapter.OnMainItemClickListener {
-    private static final String TAG = MainActivity.class.getSimpleName();
     private static final String ERROR = "Error";
     private RecyclerView recyclerView;
     private MainRecyclerViewAdapter recyclerViewAdapter;
     private GridLayoutManager gridLayoutManager;
     public static final String MODEL = "BackerModel";
+
+
 
 
     @Override
@@ -41,6 +45,15 @@ public class MainActivity extends AppCompatActivity implements MainRecyclerViewA
             messageDialog.show(getSupportFragmentManager(), ERROR);
         });
         initRecyclerView();
+    }
+
+    private void handleActionUpdateWidgets() {
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
+        int[] appWidgetsId = appWidgetManager.getAppWidgetIds(new ComponentName(this, DesiredRecipeIngredientsWidgetProvider.class));
+        DesiredRecipeIngredientsWidgetProvider.updateIngredientWidgets(this,
+                appWidgetManager,
+                appWidgetsId);
+        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetsId, R.id.widget_list_view);
     }
 
     private void initRecyclerView() {
@@ -80,6 +93,8 @@ public class MainActivity extends AppCompatActivity implements MainRecyclerViewA
     @Override
     public void onItemClick(BakeModel model) {
         Intent intent = new Intent(getApplicationContext(), BakeDetailActivity.class);
+        ChoosenRecipeIngredientList.getInstance().setData(model.getIngredients());
+        handleActionUpdateWidgets();
         intent.putExtra(MODEL, model);
         startActivity(intent);
 
