@@ -4,15 +4,14 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.kkolontay.baking.R;
+import com.kkolontay.baking.databinding.ActivityMainListItemBinding;
 import com.kkolontay.baking.model.BakeModel;
 
 import java.lang.ref.WeakReference;
@@ -37,21 +36,26 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
     }
 
     public interface OnMainItemClickListener {
-         void onItemClick( BakeModel model);
+        void onItemClick(BakeModel model);
     }
 
     @NonNull
     @Override
     public MainViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_main_list_item, parent, false);
-        MainViewHolder viewHolder = new MainViewHolder(view);
-        return viewHolder;
+        ActivityMainListItemBinding activityMainListItemBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.activity_main_list_item, parent, false);
+        return new MainViewHolder(activityMainListItemBinding);
     }
 
     @Override
     public void onBindViewHolder(@NonNull MainViewHolder holder, int position) {
-        if (bakeModels == null) {return;}
-        holder.bindData(bakeModels.get(position), position);
+        if (bakeModels == null) {
+            return;
+        }
+        BakeModel bake = bakeModels.get(position);
+        holder.getActivityMainListItemBinding().setBakeCard(bake);
+        holder.getActivityMainListItemBinding().setImageUrl(bake.getImage());
+        MainViewHolderClickListener mainListener = new MainViewHolderClickListener(position);
+        holder.getActivityMainListItemBinding().setClickListenerObject(mainListener);
 
     }
 
@@ -65,36 +69,30 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
 
 
     public class MainViewHolder extends RecyclerView.ViewHolder {
-        private ImageView imageView;
-        private TextView textView;
-        private LinearLayout linearLayout;
+        private ActivityMainListItemBinding activityMainListItemBinding;
+
+
+        public ActivityMainListItemBinding getActivityMainListItemBinding() {
+            return activityMainListItemBinding;
+        }
+
+        public MainViewHolder(@NonNull ActivityMainListItemBinding activityMainListItemBinding) {
+            super(activityMainListItemBinding.getRoot());
+            this.activityMainListItemBinding = activityMainListItemBinding;
+
+        }
+    }
+
+    public class MainViewHolderClickListener {
         private int position;
 
-        public MainViewHolder(@NonNull View itemView) {
-            super(itemView);
-            imageView = itemView.findViewById(R.id.baking_image_view);
-            textView = itemView.findViewById(R.id.baking_name_text_view);
-            linearLayout = itemView.findViewById(R.id.place_holder_card_view_main_item);
-        }
-        public void bindData(BakeModel model, int position) {
+        public MainViewHolderClickListener(int position) {
             this.position = position;
-            if (model.getImage() != null && !model.getImage().isEmpty()) {
-                Glide.with(context)
-                        .load(model.getImage())
-                        .centerCrop()
-                        .placeholder(R.drawable.baking_placeholder)
-                        .error(R.drawable.baking_placeholder)
-                        .into(imageView);
-            } else {
-                imageView.setImageResource(R.drawable.baking_placeholder);
-            }
-            textView.setText(model.getName());
-            linearLayout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    listener.get().onItemClick(bakeModels.get(position));
-                }
-            });
+        }
+
+        public void clickListener(View view) {
+            listener.get().onItemClick(bakeModels.get(position));
         }
     }
 }
+

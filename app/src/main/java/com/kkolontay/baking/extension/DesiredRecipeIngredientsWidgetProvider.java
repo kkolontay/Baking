@@ -3,16 +3,13 @@ package com.kkolontay.baking.extension;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.RemoteViews;
-
 import com.kkolontay.baking.R;
 import com.kkolontay.baking.view.mainviewactive.MainActivity;
 
-import java.util.ArrayList;
 
 /**
  * Implementation of App Widget functionality.
@@ -47,7 +44,6 @@ public class DesiredRecipeIngredientsWidgetProvider extends AppWidgetProvider {
 
     @Override
     public void onAppWidgetOptionsChanged(Context context, AppWidgetManager appWidgetManager, int appWidgetId, Bundle newOptions) {
-        //appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.widget_list_view);
         super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions);
     }
 

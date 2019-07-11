@@ -1,6 +1,7 @@
 package com.kkolontay.baking.view.mainviewactive;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -11,6 +12,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import com.kkolontay.baking.R;
+import com.kkolontay.baking.databinding.ActivityMainBinding;
 import com.kkolontay.baking.extension.AlertMessageDialog;
 import com.kkolontay.baking.extension.ChoosenRecipeIngredientList;
 import com.kkolontay.baking.extension.DesiredRecipeIngredientsWidgetProvider;
@@ -25,6 +27,7 @@ public class MainActivity extends AppCompatActivity implements MainRecyclerViewA
     private MainRecyclerViewAdapter recyclerViewAdapter;
     private GridLayoutManager gridLayoutManager;
     public static final String MODEL = "BackerModel";
+    private ActivityMainBinding activityMainBinding;
 
 
 
@@ -33,7 +36,8 @@ public class MainActivity extends AppCompatActivity implements MainRecyclerViewA
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        recyclerView = findViewById(R.id.main_recycler_view);
+        activityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        recyclerView = activityMainBinding.mainRecyclerView;
         MainViewModel  viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
         viewModel.getBakes().observe(this, bakes -> {
             recyclerViewAdapter.setBakeModels(bakes);

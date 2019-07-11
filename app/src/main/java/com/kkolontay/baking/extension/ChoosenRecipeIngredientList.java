@@ -1,7 +1,6 @@
 package com.kkolontay.baking.extension;
 
 import com.kkolontay.baking.model.Ingredient;
-
 import java.util.ArrayList;
 
 public class ChoosenRecipeIngredientList {

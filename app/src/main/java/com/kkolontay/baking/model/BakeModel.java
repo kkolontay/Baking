@@ -2,6 +2,14 @@ package com.kkolontay.baking.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.widget.ImageView;
+
+import androidx.databinding.BindingAdapter;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import com.kkolontay.baking.R;
+
 import java.util.ArrayList;
 
 public class BakeModel implements Parcelable {
@@ -70,5 +78,17 @@ public class BakeModel implements Parcelable {
         parcel.writeTypedList(steps);
         parcel.writeInt(servings);
         parcel.writeString(image);
+    }
+
+    @BindingAdapter("profileImage")
+    public static void loadImage(ImageView view, String imageUrl) {
+        if (imageUrl != null && !imageUrl.isEmpty()) {
+            Glide.with(view.getContext())
+                    .load(imageUrl)
+                    .centerCrop()
+                    .placeholder(R.drawable.baking_placeholder)
+                    .error(R.drawable.baking_placeholder)
+                    .into(view);
+        }
     }
 }
