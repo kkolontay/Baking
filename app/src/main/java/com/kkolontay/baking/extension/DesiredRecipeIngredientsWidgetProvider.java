@@ -20,9 +20,12 @@ public class DesiredRecipeIngredientsWidgetProvider extends AppWidgetProvider {
                                 int appWidgetId) {
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.ingredient_widget);
         Intent intent = new Intent(context, ListWidgetService.class);
+        intent.setAction(DesiredRecipeIngredientsWidgetProvider.class.getName());
         views.setRemoteAdapter(R.id.widget_list_view, intent);
         Intent appIntent = new Intent(context, MainActivity.class);
+
         PendingIntent appPendingIntent = PendingIntent.getActivity(context, 0, appIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        views.setOnClickFillInIntent(R.id.widget_list_view, appIntent);
         views.setPendingIntentTemplate(R.id.widget_list_view, appPendingIntent);
         appWidgetManager.updateAppWidget(appWidgetId, views);
     }
@@ -46,6 +49,18 @@ public class DesiredRecipeIngredientsWidgetProvider extends AppWidgetProvider {
     public void onAppWidgetOptionsChanged(Context context, AppWidgetManager appWidgetManager, int appWidgetId, Bundle newOptions) {
         super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions);
     }
+
+//    @Override
+//    public void onReceive(Context context, Intent intent) {
+//        super.onReceive(context, intent);
+//        String action = intent.getAction();
+//        String actionName = DesiredRecipeIngredientsWidgetProvider.class.getName();
+//
+//        if (actionName.equals(action)) {
+//            MainActivity mc = new MainActivity(context);
+//            mc.toggleEnable();
+//        }
+//    }
 
     @Override
     public void onEnabled(Context context) {

@@ -1,10 +1,13 @@
 package com.kkolontay.baking.extension;
 
 import android.content.Context;
+import android.content.Intent;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 import com.kkolontay.baking.R;
 import com.kkolontay.baking.model.Ingredient;
+import com.kkolontay.baking.view.mainviewactive.MainActivity;
+
 import java.util.ArrayList;
 
 public class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
@@ -46,6 +49,8 @@ public class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFac
         views.setTextViewText(R.id.ingredient_description_text_view, ingredients.get(i).getIngredient());
         views.setTextViewText(R.id.measure_text_view, ingredients.get(i).getMeasure());
         views.setTextViewText(R.id.quantity_text_view, Float.toString(ingredients.get(i).getQuantity()));
+        Intent intent = new Intent(context, MainActivity.class);
+        views.setOnClickFillInIntent(R.id.relative_layout_item_widget, intent);
         return views;
     }
 
