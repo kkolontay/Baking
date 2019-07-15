@@ -1,5 +1,6 @@
 package com.kkolontay.baking.view.bakingdetail;
 import androidx.annotation.NonNull;
+import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import android.content.Intent;
@@ -43,18 +44,35 @@ public class BakeDetailActivity extends AppCompatActivity implements BakeDetaiIt
         } else {
             twoPanel = false;
         }
-        setTitle(model.getName());
-        Log.v(TAG, model.getImage());
-        RecipeStepsFragment fragment = new RecipeStepsFragment(model);
-        FragmentManager manager = getSupportFragmentManager();
-        fragment.setDelegate(this);
-        manager.beginTransaction()
-                .add(R.id.steps_fragment_container, fragment)
-                .commit();
+        launchFrame();
     }
 
+    private void launchFrame() {
+        if(model != null) {
+            setTitle(model.getName());
+            Log.v(TAG, model.getImage());
+            RecipeStepsFragment fragment = new RecipeStepsFragment(model);
+            FragmentManager manager = getSupportFragmentManager();
+            fragment.setDelegate(this);
+            manager.beginTransaction()
+                    .add(R.id.steps_fragment_container, fragment)
+                    .commit();
+        }
+    }
 
-        @Override
+    @VisibleForTesting
+    public void setModel(BakeModel model) {
+        this.model = model;
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                launchFrame();
+            }
+        });
+
+    }
+
+    @Override
 
     public void onSaveInstanceState(@NonNull Bundle outState ) {
         outState.putParcelable(MODEL, model);
@@ -80,7 +98,7 @@ public class BakeDetailActivity extends AppCompatActivity implements BakeDetaiIt
         } else {
             int stepPosition = position - 1;
             selectedIndex = stepPosition;
-            if (twoPanel == true) {
+            if (twoPanel) {
                 replaceFragment();
             } else {
                 if (stepPosition >= 0 && stepPosition < model.getSteps().size()) {

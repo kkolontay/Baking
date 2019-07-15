@@ -20,6 +20,32 @@ public class BakeModel implements Parcelable {
     private int servings;
     private String image;
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setIngredients(ArrayList<Ingredient> ingredients) {
+        this.ingredients = ingredients;
+    }
+
+    public void setSteps(ArrayList<Step> steps) {
+        this.steps = steps;
+    }
+
+    public void setServings(int servings) {
+        this.servings = servings;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public BakeModel(){}
+
     protected BakeModel(Parcel in) {
         id = in.readInt();
         name = in.readString();

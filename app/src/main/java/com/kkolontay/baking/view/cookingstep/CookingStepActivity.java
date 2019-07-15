@@ -1,5 +1,6 @@
 package com.kkolontay.baking.view.cookingstep;
 import androidx.annotation.NonNull;
+import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import android.content.res.Configuration;
@@ -34,7 +35,24 @@ public class CookingStepActivity extends AppCompatActivity {
         replaceFragment();
     }
 
+
+    @VisibleForTesting
+    public void setSteps(ArrayList<Step> steps) {
+        stepsList = steps;
+    }
+
+    @VisibleForTesting
+    public int getStepsCount() {
+        return stepsList.size();
+    }
+
+    @VisibleForTesting
+    public int getSelectedIndex() {
+        return selectedIndex;
+    }
+
     private void replaceFragment() {
+        if (stepsList == null) {return;}
         CookingStepFragment fragment = new CookingStepFragment(stepsList.get(selectedIndex));
         FragmentManager manager = getSupportFragmentManager();
         manager.beginTransaction()
@@ -64,6 +82,11 @@ public class CookingStepActivity extends AppCompatActivity {
     }
 
     private void setButtonsVisible() {
+        if (stepsList == null) {
+            previousStepButton.setEnabled(false);
+            nextStepButton.setEnabled(false);
+            return;
+        }
         if (selectedIndex <= 0) {
             previousStepButton.setEnabled(false);
         } else {

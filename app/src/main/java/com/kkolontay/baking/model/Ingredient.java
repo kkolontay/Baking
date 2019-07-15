@@ -8,10 +8,28 @@ public class Ingredient implements Parcelable {
     private String measure;
     private String ingredient;
 
+    public Ingredient(float quantity, String measure, String ingredient) {
+        this.quantity = quantity;
+        this.measure = measure;
+        this.ingredient = ingredient;
+    }
+
     protected Ingredient(Parcel in) {
         quantity = in.readFloat();
         measure = in.readString();
         ingredient = in.readString();
+    }
+
+    public void setQuantity(float quantity) {
+        this.quantity = quantity;
+    }
+
+    public void setMeasure(String measure) {
+        this.measure = measure;
+    }
+
+    public void setIngredient(String ingredient) {
+        this.ingredient = ingredient;
     }
 
     public static final Creator<Ingredient> CREATOR = new Creator<Ingredient>() {
