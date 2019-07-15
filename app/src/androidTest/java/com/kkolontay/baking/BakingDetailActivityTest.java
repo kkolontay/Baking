@@ -34,9 +34,8 @@ public class BakingDetailActivityTest {
     }
 
     @Test
-    @UiThreadTest
     public void testListBakingDetailItem() {
-        onData(anything()).inAdapterView(withId(R.id.steps_fragment_container)).atPosition(1).perform(click());
+        onData(anything()).inAdapterView(withId(R.id.baking_staps_list_view)).atPosition(1).perform(click());
         onView(withId(R.id.previous_step_cooking_button)).check(matches(withText("Previous Step")));
     }
 }
