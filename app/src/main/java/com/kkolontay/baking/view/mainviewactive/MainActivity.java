@@ -1,10 +1,14 @@
 package com.kkolontay.baking.view.mainviewactive;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.test.espresso.IdlingResource;
 
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
@@ -16,6 +20,7 @@ import com.kkolontay.baking.databinding.ActivityMainBinding;
 import com.kkolontay.baking.extension.AlertMessageDialog;
 import com.kkolontay.baking.extension.ChoosenRecipeIngredientList;
 import com.kkolontay.baking.extension.DesiredRecipeIngredientsWidgetProvider;
+import com.kkolontay.baking.extension.idlingresource.SimpleIdlingResource;
 import com.kkolontay.baking.model.BakeModel;
 import com.kkolontay.baking.view.bakingdetail.BakeDetailActivity;
 import com.kkolontay.baking.viewmodel.MainViewModel;
@@ -28,6 +33,7 @@ public class MainActivity extends AppCompatActivity implements MainRecyclerViewA
     private GridLayoutManager gridLayoutManager;
     public static final String MODEL = "BackerModel";
     private ActivityMainBinding activityMainBinding;
+    @Nullable private SimpleIdlingResource simpleIdlingResource;
 
 
 
@@ -36,12 +42,22 @@ public class MainActivity extends AppCompatActivity implements MainRecyclerViewA
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        getIdlingResource();
+        if (savedInstanceState == null) {
+            if (simpleIdlingResource != null) {
+                simpleIdlingResource.setIdleState(false);
+            }
+        }
         activityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         recyclerView = activityMainBinding.mainRecyclerView;
         MainViewModel  viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
         viewModel.getBakes().observe(this, bakes -> {
             recyclerViewAdapter.setBakeModels(bakes);
             recyclerViewAdapter.notifyDataSetChanged();
+            if (simpleIdlingResource != null) {
+                simpleIdlingResource.setIdleState(true);
+            }
+
         });
 
         viewModel.getErrorMessage().observe(this, error -> {
@@ -49,6 +65,16 @@ public class MainActivity extends AppCompatActivity implements MainRecyclerViewA
             messageDialog.show(getSupportFragmentManager(), ERROR);
         });
         initRecyclerView();
+
+    }
+
+    @VisibleForTesting
+    @NonNull
+    public IdlingResource getIdlingResource() {
+        if (simpleIdlingResource == null) {
+            simpleIdlingResource = new SimpleIdlingResource();
+        }
+        return simpleIdlingResource;
     }
 
     private void handleActionUpdateWidgets() {
