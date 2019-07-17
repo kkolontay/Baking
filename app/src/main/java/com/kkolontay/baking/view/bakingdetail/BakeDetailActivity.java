@@ -1,6 +1,5 @@
 package com.kkolontay.baking.view.bakingdetail;
 
-import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
@@ -24,42 +23,47 @@ public class BakeDetailActivity extends AppCompatActivity implements BakeDetaiIt
 
     private BakeModel model;
     private static final String TAG = BakeDetailActivity.class.getSimpleName();
-    private static final String MODEL = "model";
     public static final String INGREDIENTS = "ingredientsItem";
     public static final String SELECTEDPOSITION = "selectedPosition";
     public static final String STEPS = "cookingSteps";
     private boolean twoPanel;
-    private int selectedIndex;
     private BakeDetailViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bake_detail);
-        selectedIndex = 0;
         model = getIntent().getParcelableExtra(MainActivity.MODEL);
         viewModel = ViewModelProviders.of(this).get(BakeDetailViewModel.class);
         viewModel.getBake().observe(this, bake -> {
             this.model = bake;
+            launchFrame();
         });
 
         viewModel.getSelectedIndex().observe(this, selectedIndexModel -> {
             if (selectedIndexModel != null) {
-                this.selectedIndex = selectedIndexModel;
+                            if (twoPanel) {
+                replaceFragment(selectedIndexModel);
+            } else {
+                if (selectedIndexModel >= 0 && selectedIndexModel < model.getSteps().size()) {
+                    Intent intent = new Intent(this, CookingStepActivity.class);
+                    intent.putExtra(SELECTEDPOSITION, selectedIndexModel);
+                    intent.putParcelableArrayListExtra(STEPS, model.getSteps());
+                    startActivity(intent);
+                }
+            }
             }
         });
         if (model != null) {
             viewModel.setBake(model);
-            viewModel.setSelectedIndex(selectedIndex);
         }
 
         if (findViewById(R.id.cooking_step_frame) != null) {
             twoPanel = true;
-            replaceFragment();
+            replaceFragment(0);
         } else {
             twoPanel = false;
         }
-        launchFrame();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
         Log.v(TAG, "onCreate");
@@ -104,7 +108,7 @@ public class BakeDetailActivity extends AppCompatActivity implements BakeDetaiIt
             FragmentManager manager = getSupportFragmentManager();
             fragment.setDelegate(this);
             manager.beginTransaction()
-                    .add(R.id.steps_fragment_container, fragment)
+                    .replace(R.id.steps_fragment_container, fragment)
                     .commit();
         }
     }
@@ -121,8 +125,8 @@ public class BakeDetailActivity extends AppCompatActivity implements BakeDetaiIt
 
     }
 
-    private void replaceFragment() {
-        CookingStepFragment fragment = new CookingStepFragment(model.getSteps().get(selectedIndex));
+    private void replaceFragment(int index) {
+        CookingStepFragment fragment = new CookingStepFragment(model.getSteps().get(index));
         FragmentManager manager = getSupportFragmentManager();
         manager.beginTransaction()
                 .replace(R.id.cooking_step_frame, fragment)
@@ -135,33 +139,12 @@ public class BakeDetailActivity extends AppCompatActivity implements BakeDetaiIt
         if (position == 0) {
             Intent intent = new Intent(this, IngredientsActivity.class);
             intent.putExtra(INGREDIENTS, model.getIngredients());
-            //startActivityForResult(intent, 0);
             startActivity(intent);
         } else {
             int stepPosition = position - 1;
-            selectedIndex = stepPosition;
-            viewModel.setSelectedIndex(selectedIndex);
-            if (twoPanel) {
-                replaceFragment();
-            } else {
-                if (stepPosition >= 0 && stepPosition < model.getSteps().size()) {
-                    Intent intent = new Intent(this, CookingStepActivity.class);
-                    intent.putExtra(SELECTEDPOSITION, stepPosition);
-                    intent.putParcelableArrayListExtra(STEPS, model.getSteps());
-                    startActivity(intent);
-                }
-            }
+            viewModel.setSelectedIndex(stepPosition);
         }
     }
-
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        if (requestCode == 0 && resultCode == RESULT_OK) {
-//           // model = data.getParcelableExtra(IngredientsActivity.title);
-//           // launchFrame();
-//        }
-//    }
 }
 
 
