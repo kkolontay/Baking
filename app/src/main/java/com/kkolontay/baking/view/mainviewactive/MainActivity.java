@@ -57,7 +57,6 @@ public class MainActivity extends AppCompatActivity implements MainRecyclerViewA
             if (simpleIdlingResource != null) {
                 simpleIdlingResource.setIdleState(true);
             }
-
         });
 
         viewModel.getErrorMessage().observe(this, error -> {

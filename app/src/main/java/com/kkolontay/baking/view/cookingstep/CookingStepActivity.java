@@ -33,6 +33,8 @@ public class CookingStepActivity extends AppCompatActivity {
         }
         configureButtons();
         replaceFragment();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
     }
 
 
