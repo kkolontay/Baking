@@ -80,8 +80,12 @@ public class CookingStepFragment extends Fragment {
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         outState.putParcelable(STEP, step);
-        outState.putLong(PLAYERPOSITION, mPlayer.getCurrentPosition());
-        outState.putBoolean(STATE, mPlayer.getPlayWhenReady());
+        if (mPlayer != null) {
+            long currentPosition = mPlayer.getCurrentPosition();
+            outState.putLong(PLAYERPOSITION, currentPosition);
+            boolean whenReady = mPlayer.getPlayWhenReady();
+            outState.putBoolean(STATE, whenReady);
+        }
         super.onSaveInstanceState(outState);
     }
 
@@ -123,10 +127,9 @@ public class CookingStepFragment extends Fragment {
         mPlayer.seekTo(position);
 
     }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+    public void configurationChanged() {
+        int orientation = getResources().getConfiguration().orientation;
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
             if (!getResources().getBoolean(R.bool.isTablet)) {
 
                 LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) mPlayerView.getLayoutParams();
@@ -134,7 +137,7 @@ public class CookingStepFragment extends Fragment {
                 params.height = params.MATCH_PARENT;
                 mPlayerView.setLayoutParams(params);
             }
-        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
+        } else if (orientation == Configuration.ORIENTATION_PORTRAIT){
             if (!getResources().getBoolean(R.bool.isTablet)) {
                 LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) mPlayerView.getLayoutParams();
                 params.width=params.MATCH_PARENT;
@@ -143,7 +146,7 @@ public class CookingStepFragment extends Fragment {
 
             }
         }
-        super.onConfigurationChanged(newConfig);
+
     }
 
     @Override
@@ -166,6 +169,7 @@ public class CookingStepFragment extends Fragment {
                 mPlayerView.onResume();
             }
         }
+        configurationChanged();
     }
 
     @Override

@@ -27,7 +27,6 @@
 
         <activity
             android:name=".view.cookingstep.CookingStepActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
             android:parentActivityName=".view.bakingdetail.BakeDetailActivity">
 
         </activity>

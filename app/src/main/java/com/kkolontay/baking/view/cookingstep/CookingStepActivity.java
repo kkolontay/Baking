@@ -104,21 +104,27 @@ public class CookingStepActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+    protected void onStart() {
+        super.onStart();
+        configurationChanged();
+    }
+
+    public void configurationChanged() {
+        int orientation = getResources().getConfiguration().orientation;
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
 
             if (!getResources().getBoolean(R.bool.isTablet)) {
                 hideSystemUI();
 
             }
 
-        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
+        } else if (orientation == Configuration.ORIENTATION_PORTRAIT){
             if (!getResources().getBoolean(R.bool.isTablet)) {
                 showSystemUI();
             }
 
         }
-        super.onConfigurationChanged(newConfig);
+
     }
 
 
