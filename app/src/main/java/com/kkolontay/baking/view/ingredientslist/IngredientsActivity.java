@@ -2,8 +2,8 @@ package com.kkolontay.baking.view.ingredientslist;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.widget.ListView;
 import com.kkolontay.baking.R;
 import com.kkolontay.baking.model.Ingredient;
@@ -20,7 +20,7 @@ public class IngredientsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ingredients);
         if (savedInstanceState != null) {
-            ingredients = savedInstanceState.getParcelable(title);
+            ingredients = savedInstanceState.getParcelableArrayList(title);
         } else {
             ingredients =  getIntent().getParcelableArrayListExtra(BakeDetailActivity.INGREDIENTS);
         }

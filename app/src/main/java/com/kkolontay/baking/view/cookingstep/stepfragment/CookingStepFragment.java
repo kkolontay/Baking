@@ -1,5 +1,6 @@
 package com.kkolontay.baking.view.cookingstep.stepfragment;
 
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.net.ConnectivityManager;
@@ -28,15 +29,17 @@ import com.google.android.exoplayer2.util.Util;
 import com.kkolontay.baking.R;
 import com.kkolontay.baking.model.Step;
 
-import java.net.InetAddress;
-
 
 public class CookingStepFragment extends Fragment {
     private Step step;
     private static final String STEP = "stepsForSaving";
+    private static final String PLAYERPOSITION = "playerPosition";
+    public static final String STATE = "state";
     private PlayerView mPlayerView;
     private ExoPlayer mPlayer;
     private Context context;
+    private long position;
+    private boolean playWhenReady;
 
 
     public CookingStepFragment() {}
@@ -55,18 +58,19 @@ public class CookingStepFragment extends Fragment {
         }
         if (savedInstanceState != null) {
             step = savedInstanceState.getParcelable(STEP);
+            position = savedInstanceState.getLong(PLAYERPOSITION);
+            playWhenReady = savedInstanceState.getBoolean(STATE);
 
+        } else {
+            position = 0;
+            playWhenReady = true;
         }
         View rootView = inflater.inflate(R.layout.fragment_cooking_step_item, container, false);
         mPlayerView = rootView.findViewById(R.id.player_view);
         if (step.getThumbnailURL().isEmpty() && step.getVideoURL().isEmpty()) {
             mPlayerView.setVisibility(View.GONE);
         } else {
-            if (!step.getVideoURL().isEmpty()) {
-                initPlayer(step.getVideoURL());
-            } else if (!step.getThumbnailURL().isEmpty()) {
-                initPlayer(step.getThumbnailURL());
-            }
+            mPlayerView.setVisibility(View.VISIBLE);
         }
         TextView textView = rootView.findViewById(R.id.step_cooking_description_text_view);
         textView.setText(step.getDescription());
@@ -76,6 +80,8 @@ public class CookingStepFragment extends Fragment {
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         outState.putParcelable(STEP, step);
+        outState.putLong(PLAYERPOSITION, mPlayer.getCurrentPosition());
+        outState.putBoolean(STATE, mPlayer.getPlayWhenReady());
         super.onSaveInstanceState(outState);
     }
 
@@ -84,7 +90,15 @@ public class CookingStepFragment extends Fragment {
         return connectivityManager.getActiveNetworkInfo() != null && connectivityManager.getActiveNetworkInfo().isConnected();
     }
 
-    private void initPlayer(String url) {
+    private void initPlayer() {
+        String url;
+        if (!step.getVideoURL().isEmpty()) {
+            url = step.getVideoURL();
+        } else if (!step.getThumbnailURL().isEmpty()) {
+            url = step.getThumbnailURL();
+        } else {
+            return;
+        }
 
         if (url == null || !isNetworkAvailable(context)) {
             mPlayerView.setVisibility(View.GONE);
@@ -105,7 +119,9 @@ public class CookingStepFragment extends Fragment {
         DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(context, userAgent);
         MediaSource videoSource = new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(uri);
         mPlayer.prepare(videoSource);
-        mPlayer.setPlayWhenReady(true);
+        mPlayer.setPlayWhenReady(playWhenReady);
+        mPlayer.seekTo(position);
+
     }
 
     @Override
@@ -131,9 +147,47 @@ public class CookingStepFragment extends Fragment {
     }
 
     @Override
-    public void onDestroy() {
-        releasePlayer();
-        super.onDestroy();
+    public void onStart() {
+        super.onStart();
+        if (Util.SDK_INT > 23) {
+            initPlayer();
+            if (mPlayerView != null) {
+                mPlayerView.onResume();
+            }
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (Util.SDK_INT <= 23 || mPlayer == null) {
+            initPlayer();
+            if (mPlayerView != null) {
+                mPlayerView.onResume();
+            }
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (Util.SDK_INT <= 23) {
+            if (mPlayerView != null) {
+                mPlayerView.onPause();
+            }
+            releasePlayer();
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (Util.SDK_INT > 23) {
+            if (mPlayerView != null) {
+                mPlayerView.onPause();
+            }
+            releasePlayer();
+        }
     }
 
     private void releasePlayer() {

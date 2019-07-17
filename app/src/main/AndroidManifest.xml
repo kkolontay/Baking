@@ -27,22 +27,18 @@
 
         <activity
             android:name=".view.cookingstep.CookingStepActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize" >
-            <meta-data android:name="android.support.PARENT_ACTIVITY"
-                android:value=".view.bakingdetail.BakeDetailActivity">
-            </meta-data>
-        </activity>
-        <activity android:name=".view.ingredientslist.IngredientsActivity">
-            <meta-data android:name="android.support.PARENT_ACTIVITY"
-                android:value=".view.bakingdetail.BakeDetailActivity">
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:parentActivityName=".view.bakingdetail.BakeDetailActivity">
 
-            </meta-data>
         </activity>
-        <activity android:name=".view.bakingdetail.BakeDetailActivity">
-            <meta-data android:name="android.support.PARENT_ACTIVITY"
-                android:value=".view.mainviewactive.MainActivity">
+        <activity android:name=".view.ingredientslist.IngredientsActivity"
+            android:parentActivityName=".view.bakingdetail.BakeDetailActivity">
 
-            </meta-data>
+        </activity>
+        <activity android:name=".view.bakingdetail.BakeDetailActivity"
+            android:launchMode="singleTop"
+            android:parentActivityName=".view.mainviewactive.MainActivity">
+
         </activity>
         <activity android:name=".view.mainviewactive.MainActivity">
             <intent-filter>
