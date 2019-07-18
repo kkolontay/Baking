@@ -16,10 +16,7 @@ import java.util.ArrayList;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 @RunWith(AndroidJUnit4.class)
 public class CookingStepActivityTest {
@@ -37,17 +34,14 @@ public class CookingStepActivityTest {
 
     @Test
     public void increaseNextFragment() {
-       // onView(withId(R.id.previous_step_cooking_button)).check();
-        //countItems = mActivityTestResult.getActivity().getStepsCount();
-       // selectedIndex = mActivityTestResult.getActivity().getSelectedIndex();
+
         onView(withId(R.id.next_step_cooking_button)).perform(click());
-       // mActivityTestResult.getActivity().getSelectedIndex().check();
+
     }
 
     @Test
     public void decreasePreviousFragment() {
-        //countItems = mActivityTestResult.getActivity().getStepsCount();
-       // selectedIndex = mActivityTestResult.getActivity().getSelectedIndex();
+
         onView(withId(R.id.previous_step_cooking_button)).perform(click());
     }
 
